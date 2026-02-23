@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Armaan's Odyssey</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --parchment:  #f5ead6;
+      --parchment2: #ede0c4;
+      --gold:       #b8956a;
+      --gold-dark:  #8c6b45;
+      --ink:        #2e1c0e;
+      --ink-light:  #6b4c30;
+      --shadow:     rgba(46, 28, 14, 0.18);
+    }
+
+    body {
+      background-color: var(--parchment);
+      font-family: 'EB Garamond', serif;
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ─── Grain texture overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Page border ─── */
+    .page-border {
+      position: fixed;
+      inset: 10px;
+      border: 2px solid var(--gold);
+      pointer-events: none;
+      z-index: 999;
+    }
+    .page-border::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1px solid var(--gold-dark);
+      opacity: 0.4;
+    }
+
+    /* ─── Header ─── */
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 52px 24px 36px;
+      background: linear-gradient(180deg, var(--parchment2) 0%, var(--parchment) 100%);
+      border-bottom: 1px solid var(--gold);
+    }
+
+    .header-ornament {
+      font-size: 1.1rem;
+      color: var(--gold);
+      letter-spacing: 12px;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-style: italic;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 2px;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 18px auto 0;
+      max-width: 340px;
+      color: var(--gold);
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .city-count {
+      margin-top: 18px;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--ink-light);
+    }
+
+    /* ─── Map wrapper ─── */
+    .map-wrap {
+      position: relative;
+      z-index: 1;
+      width: calc(100% - 60px);
+      max-width: 1200px;
+      margin: 36px auto 28px;
+    }
+
+    .map-frame {
+      border: 3px solid var(--gold);
+      box-shadow:
+        0 0 0 6px var(--parchment),
+        0 0 0 8px var(--gold-dark),
+        0 12px 48px var(--shadow);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    #map {
+      height: 68vh;
+      min-height: 480px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 28px 16px 44px;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      border-top: 1px solid var(--gold);
+      background: linear-gradient(0deg, var(--parchment2) 0%, var(--parchment) 100%);
+    }
+
+    footer .footer-ornament {
+      display: block;
+      font-size: 1.1rem;
+      letter-spacing: 8px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    /* ─── Leaflet popup customisation ─── */
+    .leaflet-popup-content-wrapper {
+      background: #fdf7ec;
+      border: 2px solid var(--gold);
+      border-radius: 3px;
+      box-shadow: 0 6px 24px var(--shadow);
+      padding: 0;
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      width: 260px !important;
+    }
+
+    .leaflet-popup-tip-container {
+      margin-top: -1px;
+    }
+
+    .leaflet-popup-tip {
+      background: var(--gold);
+    }
+
+    .leaflet-popup-close-button {
+      color: var(--ink-light) !important;
+      font-size: 18px !important;
+      padding: 6px 8px !important;
+    }
+
+    /* ─── Popup card ─── */
+    .popup-card {
+      text-align: center;
+      font-family: 'EB Garamond', serif;
+      color: var(--ink);
+      overflow: hidden;
+      border-radius: 2px;
+    }
+
+    .popup-img-wrap {
+      width: 100%;
+      height: 160px;
+      overflow: hidden;
+      position: relative;
+      background: var(--parchment2);
+    }
+
+    .popup-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .popup-img-wrap img:hover { transform: scale(1.04); }
+
+    .popup-img-wrap .img-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--ink-light);
+    }
+
+    .popup-body {
+      padding: 14px 16px 16px;
+      border-top: 1px solid var(--gold);
+    }
+
+    .popup-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .popup-body .popup-country {
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 8px;
+    }
+
+    .popup-body .popup-attraction {
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+
+    /* ─── Custom marker ─── */
+    .map-pin {
+      width: 20px;
+      height: 20px;
+      background: var(--ink);
+      border: 3px solid var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .map-pin:hover {
+      transform: scale(1.35);
+      background: var(--gold-dark);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-border"></div>
+
+  <header>
+    <span class="header-ornament">✦ ✦ ✦</span>
+    <h1>Armaan's Odyssey</h1>
+    <p class="subtitle">A Journey Through Europe</p>
+    <div class="divider">✦</div>
+    <p class="city-count">Eight cities &nbsp;·&nbsp; Three countries &nbsp;·&nbsp; One adventure</p>
+  </header>
+
+  <div class="map-wrap">
+    <div class="map-frame">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-ornament">✦</span>
+    Every city a chapter &nbsp;·&nbsp; every journey a story
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    /* ── Map init ── */
+    const map = L.map('map', {
+      center: [47.2, 10.5],
+      zoom: 5,
+      zoomControl: true,
+      scrollWheelZoom: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    /* ── City data ── */
+    const cities = [
+      { name: 'Madrid',    country: 'Spain',       lat: 40.4168,  lng: -3.7038, attraction: 'Royal Palace of Madrid',      wiki: 'Royal_Palace_of_Madrid' },
+      { name: 'Valencia',  country: 'Spain',       lat: 39.4699,  lng: -0.3763, attraction: 'City of Arts & Sciences',     wiki: 'City_of_Arts_and_Sciences,_Valencia' },
+      { name: 'Budapest',  country: 'Hungary',     lat: 47.4979,  lng: 19.0402, attraction: 'Hungarian Parliament Building', wiki: 'Hungarian_Parliament_Building' },
+      { name: 'Milan',     country: 'Italy',       lat: 45.4642,  lng:  9.1900, attraction: 'Milan Cathedral (Duomo)',      wiki: 'Milan_Cathedral' },
+      { name: 'Lake Como', country: 'Italy',       lat: 45.9940,  lng:  9.2577, attraction: 'Lake Como',                   wiki: 'Lake_Como' },
+      { name: 'Chiasso',   country: 'Switzerland', lat: 45.8418,  lng:  9.0328, attraction: 'Chiasso',                     wiki: 'Chiasso' },
+      { name: 'Zurich',    country: 'Switzerland', lat: 47.3769,  lng:  8.5417, attraction: 'Grossmünster Cathedral',       wiki: 'Grossmünster' },
+      { name: 'Vienna',    country: 'Austria',     lat: 48.2082,  lng: 16.3738, attraction: 'Schönbrunn Palace',            wiki: 'Schönbrunn_Palace' }
+    ];
+
+    /* ── Marker icon ── */
+    function makeIcon() {
+      return L.divIcon({
+        html: '<div class="map-pin"></div>',
+        className: '',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [0, -14]
+      });
+    }
+
+    /* ── Build popup HTML ── */
+    function popupHTML(city, imgSrc) {
+      return `
+        <div class="popup-card">
+          <div class="popup-img-wrap">
+            <img src="${imgSrc}" alt="${city.attraction}" loading="lazy"
+                 onerror="this.parentElement.innerHTML='<div class=\'img-loader\'>✦ No photo available ✦</div>'" />
+          </div>
+          <div class="popup-body">
+            <h2>${city.name}</h2>
+            <p class="popup-country">${city.country}</p>
+            <p class="popup-attraction">${city.attraction}</p>
+          </div>
+        </div>`;
+    }
+
+    /* ── Fetch Wikipedia thumbnail ── */
+    function fetchAndBind(city) {
+      const marker = L.marker([city.lat, city.lng], { icon: makeIcon() }).addTo(map);
+
+      const fallback = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png';
+
+      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(city.wiki)}`)
+        .then(r => r.json())
+        .then(data => {
+          const img = data.originalimage
+            ? data.originalimage.source
+            : (data.thumbnail ? data.thumbnail.source.replace(/\/\d+px-/, '/640px-') : fallback);
+          marker.bindPopup(popupHTML(city, img), { maxWidth: 280 });
+        })
+        .catch(() => {
+          marker.bindPopup(popupHTML(city, fallback), { maxWidth: 280 });
+        });
+    }
+
+    cities.forEach(fetchAndBind);
+  </script>
+</body>
+</html>

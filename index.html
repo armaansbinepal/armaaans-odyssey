@@ -11,24 +11,26 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ── Palette from image #2 ── */
+    /* ── Fifth Avenue Vintage Palette ── */
     :root {
-      --navy:    #2c3e55;   /* dark navy */
-      --steel:   #6b8db5;   /* steel blue */
-      --terra:   #c96045;   /* terracotta */
-      --salmon:  #e8a090;   /* soft salmon */
-      --silver:  #d3cfd8;   /* silver lavender */
-      --bg:      #eae7ed;   /* page background */
-      --shadow:  rgba(44, 62, 85, 0.22);
+      --cream:   #f2ede3;
+      --cream2:  #e6ddd0;
+      --sky:     #8ab4c4;
+      --tan:     #c8a86e;
+      --sage:    #85a05c;
+      --red:     #cc4535;
+      --ink:     #3a3028;
+      --ink-mid: #7a6855;
+      --shadow:  rgba(58, 48, 40, 0.18);
     }
 
     body {
-      background-color: var(--bg);
+      background-color: var(--cream);
       background-image:
-        repeating-linear-gradient(0deg,  rgba(107,141,181,0.08) 0px, rgba(107,141,181,0.08) 1px, transparent 1px, transparent 70px),
-        repeating-linear-gradient(90deg, rgba(107,141,181,0.08) 0px, rgba(107,141,181,0.08) 1px, transparent 1px, transparent 70px);
+        repeating-linear-gradient(0deg,  rgba(138,180,196,0.09) 0px, rgba(138,180,196,0.09) 1px, transparent 1px, transparent 70px),
+        repeating-linear-gradient(90deg, rgba(138,180,196,0.09) 0px, rgba(138,180,196,0.09) 1px, transparent 1px, transparent 70px);
       font-family: 'EB Garamond', serif;
-      color: var(--navy);
+      color: var(--ink);
       min-height: 100vh;
     }
 
@@ -38,18 +40,16 @@
       z-index: 1;
       text-align: center;
       padding: 52px 24px 36px;
-      background: linear-gradient(160deg, var(--navy) 0%, #3a506e 60%, #4a6080 100%);
-      border-bottom: 3px solid var(--terra);
-      box-shadow: 0 6px 32px rgba(44,62,85,0.4);
+      background: linear-gradient(180deg, var(--cream2) 0%, var(--cream) 100%);
+      border-bottom: 3px solid var(--red);
     }
 
     .header-ornament {
       font-size: 1rem;
-      color: var(--salmon);
+      color: var(--tan);
       letter-spacing: 10px;
       display: block;
       margin-bottom: 14px;
-      opacity: 0.8;
     }
 
     h1 {
@@ -57,10 +57,9 @@
       font-size: clamp(2.6rem, 6vw, 4.4rem);
       font-style: italic;
       font-weight: 600;
-      color: #f0ece8;
+      color: var(--ink);
       letter-spacing: 2px;
       line-height: 1.1;
-      text-shadow: 0 2px 16px rgba(201,96,69,0.35);
     }
 
     .subtitle {
@@ -68,7 +67,7 @@
       font-size: 0.82rem;
       letter-spacing: 6px;
       text-transform: uppercase;
-      color: var(--steel);
+      color: var(--sky);
     }
 
     .divider {
@@ -78,21 +77,21 @@
       gap: 14px;
       margin: 18px auto 0;
       max-width: 340px;
-      color: var(--terra);
+      color: var(--red);
     }
     .divider::before, .divider::after {
       content: '';
       flex: 1;
       height: 1px;
-      background: var(--terra);
-      opacity: 0.6;
+      background: var(--red);
+      opacity: 0.5;
     }
 
     .city-count {
       margin-top: 18px;
       font-style: italic;
       font-size: 1.05rem;
-      color: var(--silver);
+      color: var(--ink-mid);
     }
 
     /* ─── Compass rose ─── */
@@ -100,26 +99,23 @@
       margin: 20px auto 0;
       width: 52px;
       height: 52px;
-      opacity: 0.7;
+      opacity: 0.55;
     }
 
-    /* ─── Map wrapper ─── */
+    /* ─── Map wrapper — no border, blends into background ─── */
     .map-wrap {
       position: relative;
       z-index: 1;
       width: calc(100% - 60px);
       max-width: 1200px;
-      margin: 36px auto 28px;
+      margin: 32px auto 28px;
     }
 
     .map-frame {
-      border: 3px solid var(--terra);
-      box-shadow:
-        0 0 0 5px var(--bg),
-        0 0 0 7px var(--steel),
-        0 12px 48px var(--shadow);
-      border-radius: 3px;
+      border: 3px solid var(--cream);   /* invisible — same as bg */
+      border-radius: 4px;
       overflow: hidden;
+      box-shadow: 0 8px 32px var(--shadow);
     }
 
     #map {
@@ -135,24 +131,23 @@
       padding: 28px 16px 44px;
       font-style: italic;
       font-size: 0.95rem;
-      color: var(--silver);
-      border-top: 3px solid var(--terra);
-      background: linear-gradient(0deg, var(--navy) 0%, #3a506e 100%);
-      box-shadow: 0 -4px 24px rgba(44,62,85,0.3);
+      color: var(--ink-mid);
+      border-top: 3px solid var(--red);
+      background: linear-gradient(0deg, var(--cream2) 0%, var(--cream) 100%);
     }
 
     footer .footer-ornament {
       display: block;
       font-size: 1rem;
       letter-spacing: 8px;
-      color: var(--terra);
+      color: var(--tan);
       margin-bottom: 8px;
     }
 
     /* ─── Leaflet popup ─── */
     .leaflet-popup-content-wrapper {
-      background: #f8f5f2;
-      border: 2px solid var(--steel);
+      background: var(--cream);
+      border: 2px solid var(--tan);
       border-radius: 4px;
       box-shadow: 0 6px 28px var(--shadow);
       padding: 0;
@@ -164,10 +159,10 @@
     }
 
     .leaflet-popup-tip-container { margin-top: -1px; }
-    .leaflet-popup-tip { background: var(--steel); }
+    .leaflet-popup-tip { background: var(--tan); }
 
     .leaflet-popup-close-button {
-      color: var(--navy) !important;
+      color: var(--ink-mid) !important;
       font-size: 18px !important;
       padding: 6px 8px !important;
     }
@@ -176,7 +171,7 @@
     .popup-card {
       text-align: center;
       font-family: 'EB Garamond', serif;
-      color: var(--navy);
+      color: var(--ink);
       overflow: hidden;
       border-radius: 3px;
     }
@@ -186,7 +181,7 @@
       height: 160px;
       overflow: hidden;
       position: relative;
-      background: var(--silver);
+      background: var(--cream2);
     }
 
     .popup-img-wrap img {
@@ -207,20 +202,19 @@
       justify-content: center;
       font-style: italic;
       font-size: 0.85rem;
-      color: var(--navy);
-      opacity: 0.6;
+      color: var(--ink-mid);
     }
 
     .popup-body {
       padding: 14px 16px 16px;
-      border-top: 2px solid var(--terra);
+      border-top: 2px solid var(--tan);
     }
 
     .popup-body h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.35rem;
       font-style: italic;
-      color: var(--navy);
+      color: var(--ink);
       margin-bottom: 2px;
     }
 
@@ -228,31 +222,14 @@
       font-size: 0.78rem;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--steel);
+      color: var(--sky);
       margin-bottom: 8px;
     }
 
     .popup-body .popup-attraction {
       font-size: 0.88rem;
       font-style: italic;
-      color: var(--terra);
-    }
-
-    /* ─── Marker pin ─── */
-    .map-pin {
-      width: 20px;
-      height: 20px;
-      background: var(--terra);
-      border: 3px solid var(--navy);
-      border-radius: 50%;
-      box-shadow: 0 2px 8px var(--shadow);
-      cursor: pointer;
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-
-    .map-pin:hover {
-      transform: scale(1.35);
-      background: var(--salmon);
+      color: var(--red);
     }
   </style>
 </head>
@@ -264,23 +241,23 @@
     <div class="divider">✦</div>
     <p class="city-count">Many more cities and countries to come!!</p>
     <svg class="compass-rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" stroke="#e8a090" stroke-width="1.2">
+      <g fill="none" stroke="#c8a86e" stroke-width="1.2">
         <circle cx="50" cy="50" r="38"/>
         <circle cx="50" cy="50" r="28"/>
-        <circle cx="50" cy="50" r="4" fill="#e8a090"/>
+        <circle cx="50" cy="50" r="4" fill="#c8a86e"/>
         <line x1="50" y1="12" x2="50" y2="88"/>
         <line x1="12" y1="50" x2="88" y2="50"/>
         <line x1="23" y1="23" x2="77" y2="77" stroke-width="0.7" opacity="0.5"/>
         <line x1="77" y1="23" x2="23" y2="77" stroke-width="0.7" opacity="0.5"/>
-        <polygon points="50,12 46,28 50,24 54,28" fill="#e8a090"/>
-        <polygon points="50,88 46,72 50,76 54,72" fill="#e8a090" opacity="0.7"/>
-        <polygon points="88,50 72,46 76,50 72,54" fill="#e8a090" opacity="0.7"/>
-        <polygon points="12,50 28,46 24,50 28,54" fill="#e8a090" opacity="0.7"/>
+        <polygon points="50,12 46,28 50,24 54,28" fill="#cc4535"/>
+        <polygon points="50,88 46,72 50,76 54,72" fill="#c8a86e" opacity="0.7"/>
+        <polygon points="88,50 72,46 76,50 72,54" fill="#c8a86e" opacity="0.7"/>
+        <polygon points="12,50 28,46 24,50 28,54" fill="#c8a86e" opacity="0.7"/>
       </g>
-      <text x="50" y="9"  text-anchor="middle" fill="#e8a090" font-size="7" font-family="serif">N</text>
-      <text x="50" y="97" text-anchor="middle" fill="#e8a090" font-size="7" font-family="serif">S</text>
-      <text x="96" y="53" text-anchor="middle" fill="#e8a090" font-size="7" font-family="serif">E</text>
-      <text x="4"  y="53" text-anchor="middle" fill="#e8a090" font-size="7" font-family="serif">W</text>
+      <text x="50" y="9"  text-anchor="middle" fill="#cc4535" font-size="7" font-family="serif" font-weight="bold">N</text>
+      <text x="50" y="97" text-anchor="middle" fill="#c8a86e" font-size="7" font-family="serif">S</text>
+      <text x="96" y="53" text-anchor="middle" fill="#c8a86e" font-size="7" font-family="serif">E</text>
+      <text x="4"  y="53" text-anchor="middle" fill="#c8a86e" font-size="7" font-family="serif">W</text>
     </svg>
   </header>
 
@@ -305,30 +282,91 @@
     });
 
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+      attribution: 'Tiles &copy; Esri',
       maxZoom: 19
     }).addTo(map);
 
-    const cities = [
-      { name: 'Madrid',    country: 'Spain',       lat: 40.4168, lng: -3.7038, attraction: 'Royal Palace of Madrid',       wiki: 'Royal_Palace_of_Madrid' },
-      { name: 'Valencia',  country: 'Spain',       lat: 39.4699, lng: -0.3763, attraction: 'City of Arts & Sciences',      wiki: 'Ciudad_de_las_Artes_y_las_Ciencias' },
-      { name: 'Budapest',  country: 'Hungary',     lat: 47.4979, lng: 19.0402, attraction: 'Hungarian Parliament Building', wiki: 'Hungarian_Parliament_Building' },
-      { name: 'Milan',     country: 'Italy',       lat: 45.4642, lng:  9.1900, attraction: 'Milan Cathedral (Duomo)',       wiki: 'Milan_Cathedral' },
-      { name: 'Lake Como', country: 'Italy',       lat: 45.9940, lng:  9.2577, attraction: 'Lake Como',                    wiki: 'Lake_Como' },
-      { name: 'Chiasso',   country: 'Switzerland', lat: 45.8418, lng:  9.0328, attraction: 'Chiasso',                      wiki: 'Chiasso' },
-      { name: 'Zurich',    country: 'Switzerland', lat: 47.3769, lng:  8.5417, attraction: 'City & Lake Zürich',           wiki: 'Zürich' },
-      { name: 'Vienna',    country: 'Austria',     lat: 48.2082, lng: 16.3738, attraction: 'Schönbrunn Palace',             wiki: 'Schönbrunn_Palace' }
-    ];
+    /* ── Vintage pin colors cycling through the palette ── */
+    const pinColors = ['#cc4535', '#85a05c', '#c8a86e', '#8ab4c4', '#7a6040'];
 
-    function makeIcon() {
+    /* ── Ball-and-stick map pin ── */
+    function makePin(color) {
+      const light = 'rgba(255,255,255,0.45)';
       return L.divIcon({
-        html: '<div class="map-pin"></div>',
+        html: `
+          <div style="display:flex;flex-direction:column;align-items:center;width:22px;cursor:pointer;">
+            <div style="
+              width:18px;height:18px;
+              background: radial-gradient(circle at 37% 33%, ${light}, ${color} 60%);
+              border-radius:50%;
+              box-shadow:1px 2px 5px rgba(0,0,0,0.45),inset -1px -1px 3px rgba(0,0,0,0.2);
+              flex-shrink:0;
+            "></div>
+            <div style="
+              width:2.5px;height:13px;
+              background:linear-gradient(to bottom,${color} 0%,rgba(40,28,18,0.7) 100%);
+              border-radius:0 0 2px 2px;
+            "></div>
+          </div>`,
         className: '',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [0, -14]
+        iconSize:   [22, 31],
+        iconAnchor: [11, 31],
+        popupAnchor:[0, -33]
       });
     }
+
+    /* ── City data — Valencia has a direct beach image ── */
+    const cities = [
+      {
+        name: 'Madrid', country: 'Spain',
+        lat: 40.4168, lng: -3.7038,
+        attraction: 'Royal Palace of Madrid',
+        wiki: 'Royal_Palace_of_Madrid'
+      },
+      {
+        name: 'Valencia', country: 'Spain',
+        lat: 39.4699, lng: -0.3763,
+        attraction: 'La Malvarrosa Beach',
+        /* Direct Wikimedia Commons image — Valencia's famous beach */
+        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Playa_Malvarrosa_Valencia.jpg/1280px-Playa_Malvarrosa_Valencia.jpg'
+      },
+      {
+        name: 'Budapest', country: 'Hungary',
+        lat: 47.4979, lng: 19.0402,
+        attraction: 'Hungarian Parliament Building',
+        wiki: 'Hungarian_Parliament_Building'
+      },
+      {
+        name: 'Milan', country: 'Italy',
+        lat: 45.4642, lng: 9.1900,
+        attraction: 'Milan Cathedral (Duomo)',
+        wiki: 'Milan_Cathedral'
+      },
+      {
+        name: 'Lake Como', country: 'Italy',
+        lat: 45.9940, lng: 9.2577,
+        attraction: 'Lake Como',
+        wiki: 'Lake_Como'
+      },
+      {
+        name: 'Chiasso', country: 'Switzerland',
+        lat: 45.8418, lng: 9.0328,
+        attraction: 'Chiasso',
+        wiki: 'Chiasso'
+      },
+      {
+        name: 'Zurich', country: 'Switzerland',
+        lat: 47.3769, lng: 8.5417,
+        attraction: 'City & Lake Zürich',
+        wiki: 'Zürich'
+      },
+      {
+        name: 'Vienna', country: 'Austria',
+        lat: 48.2082, lng: 16.3738,
+        attraction: 'Schönbrunn Palace',
+        wiki: 'Schönbrunn_Palace'
+      }
+    ];
 
     function popupHTML(city, imgSrc) {
       return `
@@ -345,11 +383,16 @@
         </div>`;
     }
 
-    function fetchAndBind(city) {
-      const marker = L.marker([city.lat, city.lng], { icon: makeIcon() }).addTo(map);
-      const fallback = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png';
+    function fetchAndBind(city, color) {
+      const marker = L.marker([city.lat, city.lng], { icon: makePin(color) }).addTo(map);
 
-      /* Use the Wikipedia action API (pageimages) — more reliable than the REST summary */
+      /* If a direct image is provided, skip the API call */
+      if (city.img) {
+        marker.bindPopup(popupHTML(city, city.img), { maxWidth: 280 });
+        return;
+      }
+
+      const fallback = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png';
       const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(city.wiki)}&prop=pageimages&format=json&pithumbsize=640&origin=*`;
 
       fetch(apiUrl)
@@ -360,12 +403,10 @@
           const img   = (page && page.thumbnail) ? page.thumbnail.source : fallback;
           marker.bindPopup(popupHTML(city, img), { maxWidth: 280 });
         })
-        .catch(() => {
-          marker.bindPopup(popupHTML(city, fallback), { maxWidth: 280 });
-        });
+        .catch(() => marker.bindPopup(popupHTML(city, fallback), { maxWidth: 280 }));
     }
 
-    cities.forEach(fetchAndBind);
+    cities.forEach((city, i) => fetchAndBind(city, pinColors[i % pinColors.length]));
   </script>
 </body>
 </html>

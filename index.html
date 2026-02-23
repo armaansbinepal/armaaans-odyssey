@@ -277,7 +277,7 @@
     <h1>Armaan's Odyssey</h1>
     <p class="subtitle">A Journey Through Europe</p>
     <div class="divider">✦</div>
-    <p class="city-count">Eight cities &nbsp;·&nbsp; Three countries &nbsp;·&nbsp; One adventure</p>
+    <p class="city-count">Many more cities and countries to come!!</p>
   </header>
 
   <div class="map-wrap">
@@ -288,7 +288,7 @@
 
   <footer>
     <span class="footer-ornament">✦</span>
-    Every city a chapter &nbsp;·&nbsp; every journey a story
+    Thank you Mom and Dad
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -301,21 +301,20 @@
       scrollWheelZoom: true
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
+      maxZoom: 19
     }).addTo(map);
 
     /* ── City data ── */
     const cities = [
       { name: 'Madrid',    country: 'Spain',       lat: 40.4168,  lng: -3.7038, attraction: 'Royal Palace of Madrid',      wiki: 'Royal_Palace_of_Madrid' },
-      { name: 'Valencia',  country: 'Spain',       lat: 39.4699,  lng: -0.3763, attraction: 'City of Arts & Sciences',     wiki: 'City_of_Arts_and_Sciences,_Valencia' },
+      { name: 'Valencia',  country: 'Spain',       lat: 39.4699,  lng: -0.3763, attraction: 'City of Arts & Sciences',     wiki: 'Valencia' },
       { name: 'Budapest',  country: 'Hungary',     lat: 47.4979,  lng: 19.0402, attraction: 'Hungarian Parliament Building', wiki: 'Hungarian_Parliament_Building' },
       { name: 'Milan',     country: 'Italy',       lat: 45.4642,  lng:  9.1900, attraction: 'Milan Cathedral (Duomo)',      wiki: 'Milan_Cathedral' },
       { name: 'Lake Como', country: 'Italy',       lat: 45.9940,  lng:  9.2577, attraction: 'Lake Como',                   wiki: 'Lake_Como' },
       { name: 'Chiasso',   country: 'Switzerland', lat: 45.8418,  lng:  9.0328, attraction: 'Chiasso',                     wiki: 'Chiasso' },
-      { name: 'Zurich',    country: 'Switzerland', lat: 47.3769,  lng:  8.5417, attraction: 'Grossmünster Cathedral',       wiki: 'Grossmünster' },
+      { name: 'Zurich',    country: 'Switzerland', lat: 47.3769,  lng:  8.5417, attraction: 'City & Lake Zürich',          wiki: 'Zürich' },
       { name: 'Vienna',    country: 'Austria',     lat: 48.2082,  lng: 16.3738, attraction: 'Schönbrunn Palace',            wiki: 'Schönbrunn_Palace' }
     ];
 

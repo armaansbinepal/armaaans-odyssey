@@ -231,6 +231,89 @@
       font-style: italic;
       color: var(--red);
     }
+
+    /* ─── City lists ─── */
+    .city-lists {
+      width: calc(100% - 60px);
+      max-width: 1200px;
+      margin: 0 auto 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .list-panel {
+      background: var(--cream2);
+      border-radius: 4px;
+      border: 1px solid rgba(200,168,110,0.5);
+      overflow: hidden;
+      box-shadow: 0 4px 18px var(--shadow);
+    }
+
+    .list-panel-header {
+      padding: 15px 22px;
+      background: linear-gradient(135deg, #ddd4c2, var(--cream2));
+      border-bottom: 2px solid var(--tan);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--ink);
+      letter-spacing: 0.5px;
+    }
+
+    .list-panel ul {
+      list-style: none;
+      padding: 6px 0;
+    }
+
+    .list-panel li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 22px;
+      border-bottom: 1px solid rgba(200,168,110,0.18);
+    }
+
+    .list-panel li:last-child { border-bottom: none; }
+
+    .city-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.08rem;
+      color: var(--ink);
+      padding: 0;
+      text-align: left;
+      transition: color 0.18s;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: color 0.18s, text-decoration-color 0.18s;
+    }
+
+    .city-btn:hover {
+      color: var(--red);
+      text-decoration-color: var(--red);
+    }
+
+    .list-country {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sky);
+    }
+
+    .coming-city {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.08rem;
+      color: var(--ink-mid);
+      font-style: italic;
+    }
+
+    @media (max-width: 620px) {
+      .city-lists { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -267,6 +350,39 @@
     </div>
   </div>
 
+  <!-- ── City Lists ── -->
+  <div class="city-lists">
+
+    <div class="list-panel">
+      <div class="list-panel-header">Visited ✅</div>
+      <ul>
+        <li><button class="city-btn" onclick="flyToCity('Madrid')">Madrid</button>          <span class="list-country">Spain</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Valencia')">Valencia</button>        <span class="list-country">Spain</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Budapest')">Budapest</button>        <span class="list-country">Hungary</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Milan')">Milan</button>              <span class="list-country">Italy</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Lake Como')">Lake Como</button>      <span class="list-country">Italy</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Chiasso')">Chiasso</button>          <span class="list-country">Switzerland</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Zurich')">Zurich</button>            <span class="list-country">Switzerland</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Vienna')">Vienna</button>            <span class="list-country">Austria</span></li>
+      </ul>
+    </div>
+
+    <div class="list-panel">
+      <div class="list-panel-header">Coming Soon ✈️</div>
+      <ul>
+        <li><span class="coming-city">Florence</span>    <span class="list-country">Italy</span></li>
+        <li><span class="coming-city">Dublin</span>      <span class="list-country">Ireland</span></li>
+        <li><span class="coming-city">Copenhagen</span>  <span class="list-country">Denmark</span></li>
+        <li><span class="coming-city">London</span>      <span class="list-country">England</span></li>
+        <li><span class="coming-city">Paris</span>       <span class="list-country">France</span></li>
+        <li><span class="coming-city">Venice</span>      <span class="list-country">Italy</span></li>
+        <li><span class="coming-city">Dubrovnik</span>   <span class="list-country">Croatia</span></li>
+        <li><span class="coming-city">Split</span>       <span class="list-country">Croatia</span></li>
+      </ul>
+    </div>
+
+  </div>
+
   <footer>
     <span class="footer-ornament">✦</span>
     Thank you Mom and Dad
@@ -285,6 +401,18 @@
       attribution: 'Tiles &copy; Esri',
       maxZoom: 19
     }).addTo(map);
+
+    /* ── Marker references for fly-to ── */
+    const markers = {};
+
+    /* ── Fly to a city and open its popup ── */
+    function flyToCity(cityName) {
+      const city   = cities.find(c => c.name === cityName);
+      const marker = markers[cityName];
+      if (!city || !marker) return;
+      map.flyTo([city.lat, city.lng], 10, { duration: 1.2 });
+      setTimeout(() => marker.openPopup(), 1300);
+    }
 
     /* ── Vintage pin colors cycling through the palette ── */
     const pinColors = ['#cc4535', '#85a05c', '#c8a86e', '#8ab4c4', '#7a6040'];
@@ -384,6 +512,7 @@
 
     function fetchAndBind(city, color) {
       const marker = L.marker([city.lat, city.lng], { icon: makePin(color) }).addTo(map);
+      markers[city.name] = marker;
 
       /* If a direct image is provided, skip the API call */
       if (city.img) {

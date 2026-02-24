@@ -237,13 +237,34 @@
     .popup-song {
       padding: 10px 16px 14px;
       border-top: 1px solid rgba(200,168,110,0.3);
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.95rem;
       color: var(--ink-mid);
       letter-spacing: 0.5px;
     }
+
+    .popup-play-btn {
+      flex-shrink: 0;
+      background: var(--red);
+      border: none;
+      color: #fff;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-size: 0.68rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 2px;
+      transition: background 0.18s;
+    }
+    .popup-play-btn:hover { background: var(--ink); }
 
     /* hidden audio element — no visible player */
     .popup-audio { display: none; }
@@ -618,7 +639,10 @@
 
     function popupHTML(city, imgSrc) {
       const songLabel = city.audio ? `
-        <div class="popup-song">♪ &nbsp;${city.audio.title}</div>
+        <div class="popup-song">
+          <span>♪ &nbsp;${city.audio.title}</span>
+          <button class="popup-play-btn" aria-label="Play">▶</button>
+        </div>
         <audio class="popup-audio" preload="none"
                data-start="${city.audio.start}"${city.audio.end ? ` data-end="${city.audio.end}"` : ''}>
           <source src="${city.audio.src}" type="audio/mpeg" />
@@ -640,18 +664,44 @@
 
     /* ── Autoplay on popup open, stop on close ── */
     map.on('popupopen', function(e) {
-      const audio = e.popup.getElement()?.querySelector('.popup-audio');
+      const el    = e.popup.getElement();
+      const audio = el?.querySelector('.popup-audio');
       if (!audio) return;
+
+      const btn   = el.querySelector('.popup-play-btn');
       const start = parseFloat(audio.dataset.start) || 0;
       const end   = audio.dataset.end ? parseFloat(audio.dataset.end) : null;
-      audio.currentTime = start;
-      audio.play().catch(() => {});
-      audio.ontimeupdate = end ? function() {
-        if (audio.currentTime >= end) {
+
+      function onTimeUpdate() {
+        if (end && audio.currentTime >= end) {
           audio.pause();
           audio.currentTime = start;
+          if (btn) btn.textContent = '▶';
         }
-      } : null;
+      }
+
+      function startPlayback() {
+        audio.currentTime = start;
+        audio.ontimeupdate = onTimeUpdate;
+        audio.play().then(() => {
+          if (btn) btn.textContent = '⏸';
+        }).catch(() => {
+          if (btn) btn.textContent = '▶';
+        });
+      }
+
+      if (btn) {
+        btn.onclick = function() {
+          if (audio.paused) {
+            startPlayback();
+          } else {
+            audio.pause();
+            btn.textContent = '▶';
+          }
+        };
+      }
+
+      startPlayback();   /* autoplay on desktop; silently fails on mobile */
     });
 
     map.on('popupclose', function(e) {

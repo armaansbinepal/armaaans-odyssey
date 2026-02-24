@@ -626,8 +626,9 @@
     function popupHTML(city, imgSrc) {
       const ytEmbed = city.youtube ? `
         <div class="popup-youtube">
-          <p class="popup-youtube-label">♪ ${city.youtube.title || 'Now Playing'}</p>
-          <iframe src="https://www.youtube.com/embed/${city.youtube.id}?start=${city.youtube.start}&end=${city.youtube.end}&rel=0&modestbranding=1"
+          <p class="popup-youtube-label">♪ Now Playing</p>
+          <iframe
+            data-src="https://www.youtube.com/embed/${city.youtube.id}?start=${city.youtube.start}&end=${city.youtube.end}&rel=0&modestbranding=1&autoplay=1"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
@@ -646,6 +647,21 @@
           ${ytEmbed}
         </div>`;
     }
+
+    /* ── Autoplay on popup open, stop on close ── */
+    map.on('popupopen', function(e) {
+      const iframe = e.popup.getElement()?.querySelector('.popup-youtube iframe');
+      if (iframe && iframe.dataset.src) {
+        iframe.src = iframe.dataset.src;
+      }
+    });
+
+    map.on('popupclose', function(e) {
+      const iframe = e.popup.getElement()?.querySelector('.popup-youtube iframe');
+      if (iframe) {
+        iframe.src = '';
+      }
+    });
 
     function fetchAndBind(city, color) {
       const marker = L.marker([city.lat, city.lng], { icon: makePin(color) }).addTo(map);

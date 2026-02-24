@@ -568,7 +568,8 @@
         name: 'Madrid', country: 'Spain',
         lat: 40.4168, lng: -3.7038,
         attraction: 'Royal Palace of Madrid',
-        img: 'img/madrid.jpg'
+        img: 'img/madrid.jpg',
+        audio: { src: 'audio/madrid.mp3', start: 0, title: 'Candela — Buena Vista Social Club' }
       },
       {
         name: 'Valencia', country: 'Spain',
@@ -619,7 +620,7 @@
       const songLabel = city.audio ? `
         <div class="popup-song">♪ &nbsp;${city.audio.title}</div>
         <audio class="popup-audio" preload="none"
-               data-start="${city.audio.start}" data-end="${city.audio.end}">
+               data-start="${city.audio.start}"${city.audio.end ? ` data-end="${city.audio.end}"` : ''}>
           <source src="${city.audio.src}" type="audio/mpeg" />
         </audio>` : '';
       return `
@@ -641,16 +642,16 @@
     map.on('popupopen', function(e) {
       const audio = e.popup.getElement()?.querySelector('.popup-audio');
       if (!audio) return;
-      const start = parseFloat(audio.dataset.start);
-      const end   = parseFloat(audio.dataset.end);
+      const start = parseFloat(audio.dataset.start) || 0;
+      const end   = audio.dataset.end ? parseFloat(audio.dataset.end) : null;
       audio.currentTime = start;
       audio.play().catch(() => {});
-      audio.ontimeupdate = function() {
+      audio.ontimeupdate = end ? function() {
         if (audio.currentTime >= end) {
           audio.pause();
           audio.currentTime = start;
         }
-      };
+      } : null;
     });
 
     map.on('popupclose', function(e) {

@@ -233,27 +233,26 @@
       color: var(--red);
     }
 
-    /* ─── YouTube embed ─── */
-    .popup-youtube {
-      padding: 10px 14px 14px;
+    /* ─── Song name label ─── */
+    .popup-song {
+      padding: 10px 16px 14px;
       border-top: 1px solid rgba(200,168,110,0.3);
-    }
-
-    .popup-youtube iframe {
-      width: 100%;
-      height: 130px;
-      border-radius: 3px;
-      display: block;
-    }
-
-    .popup-youtube-label {
-      font-family: 'EB Garamond', serif;
-      font-size: 0.78rem;
-      font-style: italic;
-      color: var(--ink-mid);
-      letter-spacing: 1px;
-      margin-bottom: 6px;
       text-align: center;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      letter-spacing: 0.5px;
+    }
+
+    /* hidden 1×1 iframe — audio only, no visible player */
+    .popup-yt-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
     }
 
     /* ─── City lists ─── */
@@ -595,7 +594,7 @@
         lat: 45.4642, lng: 9.1900,
         attraction: 'Milan Cathedral (Duomo)',
         img: 'img/milan.jpg',
-        youtube: { id: 'CaLdtnR5vfE', start: 16, end: 37 }
+        youtube: { id: 'CaLdtnR5vfE', start: 16, end: 37, title: 'Sarà Perché Ti Amo' }
       },
       {
         name: 'Lake Como', country: 'Italy',
@@ -624,14 +623,13 @@
     ];
 
     function popupHTML(city, imgSrc) {
-      const ytEmbed = city.youtube ? `
-        <div class="popup-youtube">
-          <p class="popup-youtube-label">♪ Now Playing</p>
+      const songLabel = city.youtube ? `
+        <div class="popup-song">♪ &nbsp;${city.youtube.title}</div>
+        <div class="popup-yt-hidden">
           <iframe
-            data-src="https://www.youtube.com/embed/${city.youtube.id}?start=${city.youtube.start}&end=${city.youtube.end}&rel=0&modestbranding=1&autoplay=1"
+            data-src="https://www.youtube.com/embed/${city.youtube.id}?start=${city.youtube.start}&end=${city.youtube.end}&rel=0&modestbranding=1&autoplay=1&enablejsapi=1"
             frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+            allow="autoplay; encrypted-media"></iframe>
         </div>` : '';
       return `
         <div class="popup-card">
@@ -644,7 +642,7 @@
             <p class="popup-country">${city.country}</p>
             <p class="popup-attraction">${city.attraction}</p>
           </div>
-          ${ytEmbed}
+          ${songLabel}
         </div>`;
     }
 

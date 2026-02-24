@@ -692,9 +692,6 @@
         audio.play().then(() => {
           if (btn) btn.textContent = '⏸';
         }).catch(() => {
-          /* Reset to clean state so first button tap works on mobile */
-          audio.load();
-          audio.currentTime = start;
           if (btn) btn.textContent = '▶';
         });
       }
@@ -710,7 +707,12 @@
         };
       }
 
-      startPlayback();   /* autoplay on desktop; silently fails on mobile */
+      /* Only attempt autoplay on desktop — on touch devices skip it entirely
+         so the audio element stays pristine and the first tap on ▶ works */
+      const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+      if (!isTouch) {
+        startPlayback();
+      }
     });
 
     map.on('popupclose', function(e) {

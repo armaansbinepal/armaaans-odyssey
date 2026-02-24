@@ -304,11 +304,50 @@
       color: var(--sky);
     }
 
-    .coming-city {
+    .coming-city-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
       font-family: 'EB Garamond', serif;
       font-size: 1.08rem;
       color: var(--ink-mid);
       font-style: italic;
+      padding: 0;
+      text-align: left;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: color 0.18s, text-decoration-color 0.18s;
+    }
+
+    .coming-city-btn:hover {
+      color: var(--sky);
+      text-decoration-color: var(--sky);
+    }
+
+    /* ─── Photo coming soon placeholder ─── */
+    .photo-soon {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream2);
+      gap: 10px;
+    }
+
+    .photo-soon .soon-icon {
+      font-size: 2rem;
+      opacity: 0.45;
+    }
+
+    .photo-soon p {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      letter-spacing: 1px;
     }
 
     @media (max-width: 620px) {
@@ -370,14 +409,14 @@
     <div class="list-panel">
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
-        <li><span class="coming-city">Florence</span>    <span class="list-country">Italy</span></li>
-        <li><span class="coming-city">Dublin</span>      <span class="list-country">Ireland</span></li>
-        <li><span class="coming-city">Copenhagen</span>  <span class="list-country">Denmark</span></li>
-        <li><span class="coming-city">London</span>      <span class="list-country">England</span></li>
-        <li><span class="coming-city">Paris</span>       <span class="list-country">France</span></li>
-        <li><span class="coming-city">Venice</span>      <span class="list-country">Italy</span></li>
-        <li><span class="coming-city">Dubrovnik</span>   <span class="list-country">Croatia</span></li>
-        <li><span class="coming-city">Split</span>       <span class="list-country">Croatia</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Florence')">Florence</button>      <span class="list-country">Italy</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Dublin')">Dublin</button>          <span class="list-country">Ireland</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Copenhagen')">Copenhagen</button>  <span class="list-country">Denmark</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('London')">London</button>          <span class="list-country">England</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Paris')">Paris</button>            <span class="list-country">France</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Venice')">Venice</button>          <span class="list-country">Italy</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Dubrovnik')">Dubrovnik</button>    <span class="list-country">Croatia</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Split')">Split</button>            <span class="list-country">Croatia</span></li>
       </ul>
     </div>
 
@@ -402,13 +441,75 @@
       maxZoom: 19
     }).addTo(map);
 
-    /* ── Marker references for fly-to ── */
-    const markers = {};
+    /* ── Marker references (visited + coming soon) ── */
+    const allMarkers = {};
 
-    /* ── Fly to a city and open its popup ── */
+    /* ── Coming soon city data ── */
+    const comingSoon = [
+      { name: 'Florence',   country: 'Italy',    lat: 43.7696, lng: 11.2558 },
+      { name: 'Dublin',     country: 'Ireland',  lat: 53.3498, lng: -6.2603 },
+      { name: 'Copenhagen', country: 'Denmark',  lat: 55.6761, lng: 12.5683 },
+      { name: 'London',     country: 'England',  lat: 51.5074, lng: -0.1278 },
+      { name: 'Paris',      country: 'France',   lat: 48.8566, lng:  2.3522 },
+      { name: 'Venice',     country: 'Italy',    lat: 45.4408, lng: 12.3155 },
+      { name: 'Dubrovnik',  country: 'Croatia',  lat: 42.6507, lng: 18.0944 },
+      { name: 'Split',      country: 'Croatia',  lat: 43.5081, lng: 16.4402 }
+    ];
+
+    /* ── Grey ball-and-stick pin for coming soon ── */
+    function makeGrayPin() {
+      return L.divIcon({
+        html: `
+          <div style="display:flex;flex-direction:column;align-items:center;width:22px;cursor:pointer;opacity:0.72;">
+            <div style="
+              width:18px;height:18px;
+              background: radial-gradient(circle at 37% 33%, rgba(255,255,255,0.4), #7a7a7a 60%);
+              border-radius:50%;
+              box-shadow:1px 2px 5px rgba(0,0,0,0.35),inset -1px -1px 3px rgba(0,0,0,0.15);
+              flex-shrink:0;
+            "></div>
+            <div style="
+              width:2.5px;height:13px;
+              background:linear-gradient(to bottom,#7a7a7a 0%,rgba(40,40,40,0.6) 100%);
+              border-radius:0 0 2px 2px;
+            "></div>
+          </div>`,
+        className: '',
+        iconSize:   [22, 31],
+        iconAnchor: [11, 31],
+        popupAnchor:[0, -33]
+      });
+    }
+
+    /* ── Popup for coming soon cities ── */
+    function comingSoonPopupHTML(city) {
+      return `
+        <div class="popup-card">
+          <div class="popup-img-wrap">
+            <div class="photo-soon">
+              <span class="soon-icon">📷</span>
+              <p>Photo Coming Soon</p>
+            </div>
+          </div>
+          <div class="popup-body">
+            <h2>${city.name}</h2>
+            <p class="popup-country">${city.country}</p>
+            <p class="popup-attraction" style="color:var(--sky);font-style:italic;">Coming soon...</p>
+          </div>
+        </div>`;
+    }
+
+    /* ── Add coming soon markers ── */
+    comingSoon.forEach(city => {
+      const marker = L.marker([city.lat, city.lng], { icon: makeGrayPin() }).addTo(map);
+      marker.bindPopup(comingSoonPopupHTML(city), { maxWidth: 280 });
+      allMarkers[city.name] = marker;
+    });
+
+    /* ── Unified fly-to (works for both lists) ── */
     function flyToCity(cityName) {
-      const city   = cities.find(c => c.name === cityName);
-      const marker = markers[cityName];
+      const city   = [...cities, ...comingSoon].find(c => c.name === cityName);
+      const marker = allMarkers[cityName];
       if (!city || !marker) return;
       map.flyTo([city.lat, city.lng], 10, { duration: 1.2 });
       setTimeout(() => marker.openPopup(), 1300);
@@ -512,7 +613,7 @@
 
     function fetchAndBind(city, color) {
       const marker = L.marker([city.lat, city.lng], { icon: makePin(color) }).addTo(map);
-      markers[city.name] = marker;
+      allMarkers[city.name] = marker;
 
       /* If a direct image is provided, skip the API call */
       if (city.img) {

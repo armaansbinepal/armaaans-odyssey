@@ -603,7 +603,8 @@
         name: 'Budapest', country: 'Hungary',
         lat: 47.4979, lng: 19.0402,
         attraction: 'Hungarian Parliament Building',
-        img: 'img/budapest.jpg'
+        img: 'img/budapest.jpg',
+        audio: { src: 'audio/budapest.mp3', start: 0, title: "Don't Bring Me Down" }
       },
       {
         name: 'Milan', country: 'Italy',
@@ -691,6 +692,9 @@
         audio.play().then(() => {
           if (btn) btn.textContent = '⏸';
         }).catch(() => {
+          /* Reset to clean state so first button tap works on mobile */
+          audio.load();
+          audio.currentTime = start;
           if (btn) btn.textContent = '▶';
         });
       }

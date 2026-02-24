@@ -245,15 +245,8 @@
       letter-spacing: 0.5px;
     }
 
-    /* hidden 1×1 iframe — audio only, no visible player */
-    .popup-yt-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
+    /* hidden audio element — no visible player */
+    .popup-audio { display: none; }
 
     /* ─── City lists ─── */
     .city-lists {
@@ -594,7 +587,7 @@
         lat: 45.4642, lng: 9.1900,
         attraction: 'Milan Cathedral (Duomo)',
         img: 'img/milan.jpg',
-        youtube: { id: 'CaLdtnR5vfE', start: 16, end: 37, title: 'Sarà Perché Ti Amo' }
+        audio: { src: 'audio/milan.mp3', start: 16, end: 37, title: 'Sarà Perché Ti Amo' }
       },
       {
         name: 'Lake Como', country: 'Italy',
@@ -623,14 +616,12 @@
     ];
 
     function popupHTML(city, imgSrc) {
-      const songLabel = city.youtube ? `
-        <div class="popup-song">♪ &nbsp;${city.youtube.title}</div>
-        <div class="popup-yt-hidden">
-          <iframe
-            data-src="https://www.youtube.com/embed/${city.youtube.id}?start=${city.youtube.start}&end=${city.youtube.end}&rel=0&modestbranding=1&autoplay=1&enablejsapi=1"
-            frameborder="0"
-            allow="autoplay; encrypted-media"></iframe>
-        </div>` : '';
+      const songLabel = city.audio ? `
+        <div class="popup-song">♪ &nbsp;${city.audio.title}</div>
+        <audio class="popup-audio" preload="none"
+               data-start="${city.audio.start}" data-end="${city.audio.end}">
+          <source src="${city.audio.src}" type="audio/mpeg" />
+        </audio>` : '';
       return `
         <div class="popup-card">
           <div class="popup-img-wrap">
@@ -648,17 +639,25 @@
 
     /* ── Autoplay on popup open, stop on close ── */
     map.on('popupopen', function(e) {
-      const iframe = e.popup.getElement()?.querySelector('.popup-youtube iframe');
-      if (iframe && iframe.dataset.src) {
-        iframe.src = iframe.dataset.src;
-      }
+      const audio = e.popup.getElement()?.querySelector('.popup-audio');
+      if (!audio) return;
+      const start = parseFloat(audio.dataset.start);
+      const end   = parseFloat(audio.dataset.end);
+      audio.currentTime = start;
+      audio.play().catch(() => {});
+      audio.ontimeupdate = function() {
+        if (audio.currentTime >= end) {
+          audio.pause();
+          audio.currentTime = start;
+        }
+      };
     });
 
     map.on('popupclose', function(e) {
-      const iframe = e.popup.getElement()?.querySelector('.popup-youtube iframe');
-      if (iframe) {
-        iframe.src = '';
-      }
+      const audio = e.popup.getElement()?.querySelector('.popup-audio');
+      if (!audio) return;
+      audio.pause();
+      audio.ontimeupdate = null;
     });
 
     function fetchAndBind(city, color) {

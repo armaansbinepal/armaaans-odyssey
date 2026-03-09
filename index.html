@@ -440,13 +440,13 @@
         <li><button class="city-btn" onclick="flyToCity('Chiasso')">Chiasso</button>          <span class="list-country">Switzerland</span></li>
         <li><button class="city-btn" onclick="flyToCity('Zurich')">Zurich</button>            <span class="list-country">Switzerland</span></li>
         <li><button class="city-btn" onclick="flyToCity('Vienna')">Vienna</button>            <span class="list-country">Austria</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Florence')">Florence</button>          <span class="list-country">Italy</span></li>
       </ul>
     </div>
 
     <div class="list-panel">
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
-        <li><button class="coming-city-btn" onclick="flyToCity('Florence')">Florence</button>      <span class="list-country">Italy</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Dublin')">Dublin</button>          <span class="list-country">Ireland</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Copenhagen')">Copenhagen</button>  <span class="list-country">Denmark</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('London')">London</button>          <span class="list-country">England</span></li>
@@ -484,7 +484,6 @@
 
     /* ── Coming soon city data ── */
     const comingSoon = [
-      { name: 'Florence',   country: 'Italy',    lat: 43.7696, lng: 11.2558 },
       { name: 'Dublin',     country: 'Ireland',  lat: 53.3498, lng: -6.2603 },
       { name: 'Copenhagen', country: 'Denmark',  lat: 55.6761, lng: 12.5683 },
       { name: 'London',     country: 'England',  lat: 51.5074, lng: -0.1278 },
@@ -633,6 +632,12 @@
         attraction: 'City & Lake Zürich',
         img: 'img/zurich.jpg',
         audio: { src: 'audio/zurich.mp3', start: 0, title: 'Get It Together' }
+      },
+      {
+        name: 'Florence', country: 'Italy',
+        lat: 43.7696, lng: 11.2558,
+        attraction: 'Florence Cathedral (Duomo)',
+        wiki: 'Florence'
       },
       {
         name: 'Vienna', country: 'Austria',

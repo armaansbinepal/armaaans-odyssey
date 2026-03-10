@@ -364,6 +364,18 @@
     }
     .lightbox-close:hover { opacity: 1; }
 
+    /* ─── Airplane ─── */
+    #airplane {
+      display: none;
+      position: fixed;
+      font-size: 1.5rem;
+      pointer-events: none;
+      z-index: 1000;
+      transform-origin: center;
+      will-change: left, top, opacity;
+      line-height: 1;
+    }
+
     /* ─── City lists ─── */
     .city-lists {
       width: calc(100% - 60px);
@@ -570,6 +582,9 @@
     <span class="footer-ornament">✦</span>
     Thank you Mom and Dad
   </footer>
+
+  <!-- ── Airplane ── -->
+  <div id="airplane">✈</div>
 
   <!-- ── Lightbox ── -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox()">
@@ -871,10 +886,37 @@
 
     cities.forEach((city, i) => fetchAndBind(city, pinColors[i % pinColors.length]));
 
-    /* ── Next city ── */
+    /* ── Next city with airplane animation ── */
+    function animatePlane(fromCity, toCity) {
+      const mapEl = document.getElementById('map');
+      const rect  = mapEl.getBoundingClientRect();
+      const fp    = map.latLngToContainerPoint([fromCity.lat, fromCity.lng]);
+      const tp    = map.latLngToContainerPoint([toCity.lat,   toCity.lng]);
+      const x1 = rect.left + fp.x,  y1 = rect.top + fp.y;
+      const x2 = rect.left + tp.x,  y2 = rect.top + tp.y;
+      /* ✈ emoji points NE by default — subtract 45° to align with travel angle */
+      const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI - 45;
+      const plane = document.getElementById('airplane');
+      plane.style.transition = 'none';
+      plane.style.opacity    = '1';
+      plane.style.left       = x1 + 'px';
+      plane.style.top        = y1 + 'px';
+      plane.style.transform  = `translate(-50%,-50%) rotate(${angle}deg)`;
+      plane.style.display    = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        plane.style.transition = 'left 1.1s ease-in-out, top 1.1s ease-in-out, opacity 0.3s ease 0.85s';
+        plane.style.left       = x2 + 'px';
+        plane.style.top        = y2 + 'px';
+        plane.style.opacity    = '0';
+      }));
+      setTimeout(() => { plane.style.display = 'none'; }, 1400);
+    }
+
     function flyToNextCity(currentName) {
       const idx  = cities.findIndex(c => c.name === currentName);
+      const curr = cities[idx];
       const next = cities[(idx + 1) % cities.length];
+      animatePlane(curr, next);
       map.closePopup();
       map.flyTo([next.lat, next.lng], 10, { duration: 1.2 });
       setTimeout(() => allMarkers[next.name].openPopup(), 1300);

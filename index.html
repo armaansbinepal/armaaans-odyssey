@@ -538,7 +538,7 @@
     <div class="stat"><span class="stat-num" id="stat-cities">0</span><span class="stat-label">Cities Visited</span></div>
     <div class="stat"><span class="stat-num" id="stat-countries">0</span><span class="stat-label">Countries Explored</span></div>
     <div class="stat"><span class="stat-num" id="stat-miles">0</span><span class="stat-label">Miles Traveled</span></div>
-    <div class="stat"><span class="stat-num" id="stat-soon">0</span><span class="stat-label">Cities Coming Soon</span></div>
+    <div class="stat"><span class="stat-num" id="stat-soon">0</span><span class="stat-label">& More Cities Coming</span></div>
   </div>
 
   <!-- ── City Lists ── -->
@@ -987,6 +987,9 @@
         animateCounter(document.getElementById('stat-countries'), 5,                 900);
         animateCounter(document.getElementById('stat-miles'),    totalMiles,         2200);
         animateCounter(document.getElementById('stat-soon'),     comingSoon.length,  1000);
+        setTimeout(() => {
+          document.getElementById('stat-soon').textContent = comingSoon.length + '+';
+        }, 1100);
         observer.disconnect();
       }
     }, { threshold: 0.3 });

@@ -970,6 +970,8 @@
       [47.4979,   19.0402], // Budapest
       [43.7696,   11.2558], // Florence
       [47.4979,   19.0402], // Budapest
+      [55.6761,   12.5683], // Copenhagen
+      [47.4979,   19.0402], // Budapest
     ];
 
     let totalMiles = 0;
@@ -995,7 +997,7 @@
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
         animateCounter(document.getElementById('stat-cities'),   cities.length,      1200);
-        animateCounter(document.getElementById('stat-countries'), 5,                 900);
+        animateCounter(document.getElementById('stat-countries'), 6,                 900);
         animateCounter(document.getElementById('stat-miles'),    totalMiles,         2200);
         animateCounter(document.getElementById('stat-soon'),     comingSoon.length,  1000);
         setTimeout(() => {

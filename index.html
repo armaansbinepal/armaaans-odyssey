@@ -561,6 +561,7 @@
         <li><button class="city-btn" onclick="flyToCity('Chiasso')">Chiasso</button>          <span class="list-country">Switzerland</span></li>
         <li><button class="city-btn" onclick="flyToCity('Zurich')">Zurich</button>            <span class="list-country">Switzerland</span></li>
         <li><button class="city-btn" onclick="flyToCity('Florence')">Florence</button>          <span class="list-country">Italy</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Copenhagen')">Copenhagen</button>      <span class="list-country">Denmark</span></li>
       </ul>
     </div>
 
@@ -568,7 +569,6 @@
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
         <li><button class="coming-city-btn" onclick="flyToCity('Dublin')">Dublin</button>          <span class="list-country">Ireland</span></li>
-        <li><button class="coming-city-btn" onclick="flyToCity('Copenhagen')">Copenhagen</button>  <span class="list-country">Denmark</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('London')">London</button>          <span class="list-country">England</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Paris')">Paris</button>            <span class="list-country">France</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Venice')">Venice</button>          <span class="list-country">Italy</span></li>
@@ -617,7 +617,6 @@
     /* ── Coming soon city data ── */
     const comingSoon = [
       { name: 'Dublin',     country: 'Ireland',  lat: 53.3498, lng: -6.2603 },
-      { name: 'Copenhagen', country: 'Denmark',  lat: 55.6761, lng: 12.5683 },
       { name: 'London',     country: 'England',  lat: 51.5074, lng: -0.1278 },
       { name: 'Paris',      country: 'France',   lat: 48.8566, lng:  2.3522 },
       { name: 'Venice',     country: 'Italy',    lat: 45.4408, lng: 12.3155 },
@@ -781,6 +780,13 @@
         attraction: 'The David',
         img: 'img/florence.jpg',
         audio: { src: 'audio/florence.mp3', start: 82, title: 'Yamore — Moblack, Salif Keita & Cesária Evora' }
+      },
+      {
+        name: 'Copenhagen', country: 'Denmark',
+        lat: 55.6761, lng: 12.5683,
+        attraction: 'Nyhavn',
+        img: 'img/copenhagen.jpg',
+        audio: { src: 'audio/copenhagen.mp3', start: 0, title: 'Dramatic Girl — Baby Keem' }
       }
     ];
 

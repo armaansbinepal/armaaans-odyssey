@@ -562,13 +562,13 @@
         <li><button class="city-btn" onclick="flyToCity('Zurich')">Zurich</button>            <span class="list-country">Switzerland</span></li>
         <li><button class="city-btn" onclick="flyToCity('Florence')">Florence</button>          <span class="list-country">Italy</span></li>
         <li><button class="city-btn" onclick="flyToCity('Copenhagen')">Copenhagen</button>      <span class="list-country">Denmark</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Dublin')">Dublin</button>              <span class="list-country">Ireland</span></li>
       </ul>
     </div>
 
     <div class="list-panel">
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
-        <li><button class="coming-city-btn" onclick="flyToCity('Dublin')">Dublin</button>          <span class="list-country">Ireland</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('London')">London</button>          <span class="list-country">England</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Paris')">Paris</button>            <span class="list-country">France</span></li>
         <li><button class="coming-city-btn" onclick="flyToCity('Venice')">Venice</button>          <span class="list-country">Italy</span></li>
@@ -616,7 +616,6 @@
 
     /* ── Coming soon city data ── */
     const comingSoon = [
-      { name: 'Dublin',     country: 'Ireland',  lat: 53.3498, lng: -6.2603 },
       { name: 'London',     country: 'England',  lat: 51.5074, lng: -0.1278 },
       { name: 'Paris',      country: 'France',   lat: 48.8566, lng:  2.3522 },
       { name: 'Venice',     country: 'Italy',    lat: 45.4408, lng: 12.3155 },
@@ -787,6 +786,13 @@
         attraction: 'Nyhavn',
         img: 'img/copenhagen.jpg',
         audio: { src: 'audio/copenhagen.mp3', start: 0, title: 'Dramatic Girl — Baby Keem' }
+      },
+      {
+        name: 'Dublin', country: 'Ireland',
+        lat: 53.3498, lng: -6.2603,
+        attraction: 'Guinness Storehouse',
+        img: 'img/dublin.jpg',
+        audio: { src: 'audio/dublin.mp3', start: 0, title: "I'm Shipping Up To Boston — Dropkick Murphys" }
       }
     ];
 
@@ -971,6 +977,7 @@
       [43.7696,   11.2558], // Florence
       [47.4979,   19.0402], // Budapest
       [55.6761,   12.5683], // Copenhagen
+      [53.3498,   -6.2603], // Dublin
       [47.4979,   19.0402], // Budapest
     ];
 
@@ -997,7 +1004,7 @@
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
         animateCounter(document.getElementById('stat-cities'),   cities.length,      1200);
-        animateCounter(document.getElementById('stat-countries'), 6,                 900);
+        animateCounter(document.getElementById('stat-countries'), 7,                 900);
         animateCounter(document.getElementById('stat-miles'),    totalMiles,         2200);
         animateCounter(document.getElementById('stat-soon'),     comingSoon.length,  1000);
         setTimeout(() => {

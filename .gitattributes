@@ -1,0 +1,4 @@
+*.mp3   filter= diff=binary merge=binary -text
+*.jpg   filter= diff=binary merge=binary -text
+*.jpeg  filter= diff=binary merge=binary -text
+*.HEIC  filter= diff=binary merge=binary -text

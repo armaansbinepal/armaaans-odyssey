@@ -1,0 +1,4 @@
+*.mp3   diff=binary merge=binary -text
+*.jpg   diff=binary merge=binary -text
+*.jpeg  diff=binary merge=binary -text
+*.HEIC  diff=binary merge=binary -text

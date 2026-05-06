@@ -568,16 +568,16 @@
         <li><button class="city-btn" onclick="flyToCity('Paris')">Paris</button>                <span class="list-country">France</span></li>
         <li><button class="city-btn" onclick="flyToCity('Venice')">Venice</button>              <span class="list-country">Italy</span></li>
         <li><button class="city-btn" onclick="flyToCity('Dubrovnik')">Dubrovnik</button>        <span class="list-country">Croatia</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Seville')">Seville</button>            <span class="list-country">Spain</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Cordoba')">Cordoba</button>            <span class="list-country">Spain</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Toledo')">Toledo</button>              <span class="list-country">Spain</span></li>
       </ul>
     </div>
 
     <div class="list-panel">
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
-        <li><button class="coming-city-btn" onclick="flyToCity('Seville')">Seville</button>        <span class="list-country">Spain</span></li>
-        <li><button class="coming-city-btn" onclick="flyToCity('Cordoba')">Cordoba</button>        <span class="list-country">Spain</span></li>
-        <li><button class="coming-city-btn" onclick="flyToCity('Granada')">Granada</button>        <span class="list-country">Spain</span></li>
-        <li><button class="coming-city-btn" onclick="flyToCity('Prague')">Prague</button>          <span class="list-country">Czech Republic</span></li>
+        <li><button class="coming-city-btn" onclick="flyToCity('Lisbon')">Lisbon</button>          <span class="list-country">Portugal</span></li>
       </ul>
     </div>
 
@@ -616,10 +616,7 @@
 
     /* ── Coming soon city data ── */
     const comingSoon = [
-      { name: 'Seville',    country: 'Spain',    lat: 37.3891, lng: -5.9845 },
-      { name: 'Cordoba',    country: 'Spain',    lat: 37.8882, lng: -4.7794 },
-      { name: 'Granada',    country: 'Spain',        lat: 37.1773, lng: -3.5986 },
-      { name: 'Prague',     country: 'Czech Republic', lat: 50.0755, lng: 14.4378 }
+      { name: 'Lisbon', country: 'Portugal', lat: 38.7169, lng: -9.1395 }
     ];
 
     /* ── Grey ball-and-stick pin for coming soon ── */
@@ -819,6 +816,24 @@
         lat: 42.6507, lng: 18.0944,
         attraction: 'Old Town Walls',
         img: 'img/dubrovnik.jpg'
+      },
+      {
+        name: 'Seville', country: 'Spain',
+        lat: 37.3891, lng: -5.9845,
+        attraction: 'Real Alcázar de Sevilla',
+        wiki: 'Alcázar of Seville'
+      },
+      {
+        name: 'Cordoba', country: 'Spain',
+        lat: 37.8882, lng: -4.7794,
+        attraction: 'Mezquita-Catedral de Córdoba',
+        wiki: 'Mosque-Cathedral of Córdoba'
+      },
+      {
+        name: 'Toledo', country: 'Spain',
+        lat: 39.8628, lng: -4.0273,
+        attraction: 'Toledo Cathedral',
+        wiki: 'Toledo, Spain'
       }
     ];
 
@@ -990,6 +1005,9 @@
     const route = [
       [34.0522, -118.2437], // Los Angeles
       [40.4168,   -3.7038], // Madrid
+      [39.8628,   -4.0273], // Toledo
+      [37.3891,   -5.9845], // Seville
+      [37.8882,   -4.7794], // Cordoba
       [39.4699,   -0.3763], // Valencia
       [47.4979,   19.0402], // Budapest
       [45.4642,    9.1900], // Milan

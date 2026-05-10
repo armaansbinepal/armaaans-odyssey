@@ -299,7 +299,7 @@
       max-width: 1200px;
       margin: 0 auto 28px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       background: var(--cream2);
       border: 1px solid rgba(200,168,110,0.5);
       border-radius: 4px;
@@ -382,7 +382,7 @@
       max-width: 1200px;
       margin: 0 auto 40px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 24px;
     }
 
@@ -496,11 +496,9 @@
 
     @media (max-width: 620px) {
       .city-lists { grid-template-columns: 1fr; }
-      .stats-bar  { grid-template-columns: 1fr 1fr; }
+      .stats-bar  { grid-template-columns: 1fr; }
       .stat { border-right: none; border-bottom: 1px solid rgba(200,168,110,0.3); }
-      .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid rgba(200,168,110,0.3); }
-      .stat:nth-child(3), .stat:nth-child(4) { border-bottom: none; }
-      .stat:nth-child(odd)  { border-right: 1px solid rgba(200,168,110,0.3); }
+      .stat:last-child { border-bottom: none; }
     }
   </style>
 </head>
@@ -510,7 +508,7 @@
     <h1>Armaan's Odyssey</h1>
     <p class="subtitle">A Journey Through Europe</p>
     <div class="divider">✦</div>
-    <p class="city-count">Many more cities and countries to come!!</p>
+    <p class="city-count">An Unforgettable Experience!!</p>
     <svg class="compass-rose" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#c8a86e" stroke-width="1.2">
         <circle cx="50" cy="50" r="38"/>
@@ -543,7 +541,6 @@
     <div class="stat"><span class="stat-num" id="stat-cities">0</span><span class="stat-label">Cities Visited</span></div>
     <div class="stat"><span class="stat-num" id="stat-countries">0</span><span class="stat-label">Countries Explored</span></div>
     <div class="stat"><span class="stat-num" id="stat-miles">0</span><span class="stat-label">Miles Traveled</span></div>
-    <div class="stat"><span class="stat-num" id="stat-soon">0</span><span class="stat-label">Cities Coming Soon</span></div>
   </div>
 
   <!-- ── City Lists ── -->
@@ -575,11 +572,6 @@
       </ul>
     </div>
 
-    <div class="list-panel">
-      <div class="list-panel-header">Coming Soon ✈️</div>
-      <ul>
-      </ul>
-    </div>
 
   </div>
 
@@ -1070,13 +1062,6 @@
         animateCounter(document.getElementById('stat-cities'),   cities.length,      1200);
         animateCounter(document.getElementById('stat-countries'), 12,                900);
         animateCounter(document.getElementById('stat-miles'),    totalMiles,         2200);
-        animateCounter(document.getElementById('stat-soon'),     comingSoon.length,  1000);
-        if (comingSoon.length > 0) {
-          setTimeout(() => {
-            document.getElementById('stat-soon').textContent = comingSoon.length + '+';
-            document.getElementById('stat-soon').style.fontSize = '2.2rem';
-          }, 1100);
-        }
         observer.disconnect();
       }
     }, { threshold: 0.3 });

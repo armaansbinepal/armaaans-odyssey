@@ -571,13 +571,13 @@
         <li><button class="city-btn" onclick="flyToCity('Toledo')">Toledo</button>              <span class="list-country">Spain</span></li>
         <li><button class="city-btn" onclick="flyToCity('Cordoba')">Cordoba</button>            <span class="list-country">Spain</span></li>
         <li><button class="city-btn" onclick="flyToCity('Seville')">Seville</button>            <span class="list-country">Spain</span></li>
+        <li><button class="city-btn" onclick="flyToCity('Lisbon')">Lisbon</button>              <span class="list-country">Portugal</span></li>
       </ul>
     </div>
 
     <div class="list-panel">
       <div class="list-panel-header">Coming Soon ✈️</div>
       <ul>
-        <li><button class="coming-city-btn" onclick="flyToCity('Lisbon')">Lisbon</button>          <span class="list-country">Portugal</span></li>
       </ul>
     </div>
 
@@ -615,9 +615,7 @@
     const allMarkers = {};
 
     /* ── Coming soon city data ── */
-    const comingSoon = [
-      { name: 'Lisbon', country: 'Portugal', lat: 38.7169, lng: -9.1395 }
-    ];
+    const comingSoon = [];
 
     /* ── Grey ball-and-stick pin for coming soon ── */
     function makeGrayPin() {
@@ -841,6 +839,12 @@
         attraction: 'Plaza De Espana',
         img: 'img/seville.jpg',
         audio: { src: 'audio/seville.mp3', start: 15, title: 'Tormenta De Fuego' }
+      },
+      {
+        name: 'Lisbon', country: 'Portugal',
+        lat: 38.7169, lng: -9.1395,
+        attraction: 'Alfama District',
+        wiki: 'Lisbon'
       }
     ];
 
@@ -1015,6 +1019,7 @@
       [39.8628,   -4.0273], // Toledo
       [37.8882,   -4.7794], // Cordoba
       [37.3891,   -5.9845], // Seville
+      [38.7169,   -9.1395], // Lisbon
       [39.4699,   -0.3763], // Valencia
       [47.4979,   19.0402], // Budapest
       [45.4642,    9.1900], // Milan
@@ -1062,13 +1067,15 @@
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
         animateCounter(document.getElementById('stat-cities'),   cities.length,      1200);
-        animateCounter(document.getElementById('stat-countries'), 11,                900);
+        animateCounter(document.getElementById('stat-countries'), 12,                900);
         animateCounter(document.getElementById('stat-miles'),    totalMiles,         2200);
         animateCounter(document.getElementById('stat-soon'),     comingSoon.length,  1000);
-        setTimeout(() => {
-          document.getElementById('stat-soon').textContent = comingSoon.length + '+';
-          document.getElementById('stat-soon').style.fontSize = '2.2rem';
-        }, 1100);
+        if (comingSoon.length > 0) {
+          setTimeout(() => {
+            document.getElementById('stat-soon').textContent = comingSoon.length + '+';
+            document.getElementById('stat-soon').style.fontSize = '2.2rem';
+          }, 1100);
+        }
         observer.disconnect();
       }
     }, { threshold: 0.3 });
